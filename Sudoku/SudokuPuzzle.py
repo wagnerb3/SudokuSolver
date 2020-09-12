@@ -14,8 +14,9 @@ class Sudoku:
         self.puzzle = []
         for i in range(Sudoku.size):
             self.puzzle.append([None]*10)
+        self.getFrame()
 
-    def addValue(self, row, column, value):
+    def addAt(self, row, column, value):
         '''
         Addes the given value at the given row and column
         :param row: Row for the value to be placed
@@ -23,7 +24,7 @@ class Sudoku:
         :param value: Value to be placed at the given row and column
         :return: Void
         '''
-        self.puzzle[row][column] = value
+        self.puzzle[int(row)][int(column)] = value
 
     def addValue(self, entered):
         '''
@@ -33,9 +34,9 @@ class Sudoku:
         '''
         trio = entered.split(" ")
         for num in trio:
-            if num>Sudoku.size:
+            if int(num)>Sudoku.size:
                 print("Invalid Values. Try Again:\n")
-        self.addValue(trio[0], trio[1], trio[2])
+        self.addAt(trio[0], trio[1], trio[2])
 
     def getRow(self, row):
         '''
@@ -82,13 +83,14 @@ class Sudoku:
 
     def getFrame(self):
         print('''Enter the starting values in your puzzle.
-                The top is row 1 and the left is column 1.
-                To add a value, enter the row, column, and value, each separated by a space.
-                For example, to add the number 1 to row 3, column 4, I would enter \'3 4 1\'
-                When you are finished, enter the word \'Done\'''')
+The top is row 1 and the left is column 1.
+To add a value, enter the row, column, and value, each separated by a space.
+For example, to add the number 1 to row 3, column 4, I would enter \'3 4 1\'
+When you are finished, enter the word \'Done\'''')
         entered = input("Add a Value:\n")
-        while entered.lower() != "done":
+        while entered != "done" or entered != 'Done':
             self.addValue(entered)
+            input("Add another value or enter \'Done\'\n")
 
 
 
@@ -104,3 +106,5 @@ def remAll(list, value):
         if i != value:
             removed.append(i)
     return removed
+
+x = Sudoku()
