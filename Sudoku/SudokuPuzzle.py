@@ -13,7 +13,7 @@ class Sudoku:
     def __init__(self):
         self.puzzle = []
         for i in range(Sudoku.size):
-            self.puzzle.append([None]*10)
+            self.puzzle.append(['']*10)
         self.getFrame()
 
     def addAt(self, row, column, value):
@@ -36,6 +36,7 @@ class Sudoku:
         for num in trio:
             if int(num)>Sudoku.size:
                 print("Invalid Values. Try Again:\n")
+                return
         self.addAt(trio[0], trio[1], trio[2])
 
     def getRow(self, row):
@@ -87,11 +88,28 @@ The top is row 1 and the left is column 1.
 To add a value, enter the row, column, and value, each separated by a space.
 For example, to add the number 1 to row 3, column 4, I would enter \'3 4 1\'
 When you are finished, enter the word \'Done\'''')
+        escape = "done"
         entered = input("Add a Value:\n")
-        while entered != "done" or entered != 'Done':
+        while entered.lower() != escape:
+            if (entered == ''):
+                print("3 numbers must be entered or the word \'done\'")
+                entered = input("Add another value or enter \'Done\'\n")
+                continue
             self.addValue(entered)
-            input("Add another value or enter \'Done\'\n")
+            entered = input("Add another value or enter \'Done\'\n")
 
+    def printBoard(self):
+        '''
+        Prints text version of the Sudoku board.
+        :return: Void
+        '''
+        for i in range(Sudoku.size):
+            for j in range(Sudoku.size):
+                if self.puzzle[i][j] == '':
+                    print('x', end='')
+                else:
+                    print(self.puzzle[i][j], end='')
+            print("\n")
 
 
 def remAll(list, value):
@@ -108,3 +126,4 @@ def remAll(list, value):
     return removed
 
 x = Sudoku()
+x.printBoard()
