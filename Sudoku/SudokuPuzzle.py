@@ -1,15 +1,11 @@
-class Cell:
-    def __init__(self, row, col):
-        self.row = row
-        self.col = col
-        self.value = None
-
-    def setValue(self, value):
-        self.value = value
+import math
 
 
 class Sudoku:
-    size = 9
+    size = 4
+    sqrt = int(math.sqrt(size))
+    possValues = [*range(1, size+1, 1)]
+
     def __init__(self):
         self.puzzle = []
         for i in range(Sudoku.size):
@@ -34,7 +30,7 @@ class Sudoku:
         '''
         trio = entered.split(" ")
         for num in trio:
-            if int(num)>Sudoku.size:
+            if int(num)>Sudoku.size or len(trio) != 3:
                 print("Invalid Values. Try Again:\n")
                 return
         self.addAt(trio[0], trio[1], trio[2])
@@ -85,8 +81,8 @@ class Sudoku:
     def getFrame(self):
         print('''Enter the starting values in your puzzle.
 The top is row 1 and the left is column 1.
-To add a value, enter the row, column, and value, each separated by a space.
-For example, to add the number 1 to row 3, column 4, I would enter \'3 4 1\'
+To add a value, enter row, column, and value, each separated by a space.
+For example, to add the number 1 to row 3, column 4, enter \'3 4 1\'
 When you are finished, enter the word \'Done\'''')
         escape = "done"
         entered = input("Add a Value:\n")
@@ -97,6 +93,26 @@ When you are finished, enter the word \'Done\'''')
                 continue
             self.addValue(entered)
             entered = input("Add another value or enter \'Done\'\n")
+
+    def getRegion(self, reg):
+        '''
+        Gives sqrt size region from given reg
+        :param reg: Region to be gotten
+        :return: A one dimensional list of the given region
+        '''
+        dim = []
+        row = (reg//Sudoku.sqrt) * Sudoku.sqrt
+        col = (reg%Sudoku.sqrt) * Sudoku.sqrt
+        rMax = row + Sudoku.sqrt
+        cMax = col + Sudoku.sqrt
+        for r in range(row, rMax):
+            for c in range(col, cMax):
+                dim.append(self.puzzle[r][c])
+        return dim
+
+    def getRegion(self, row, col):
+        return self.getRegion((col//Sudoku.sqrt) + ((row//Sudoku.sqrt) * Sudoku.sqrt))
+
 
     def printBoard(self):
         '''
@@ -111,6 +127,19 @@ When you are finished, enter the word \'Done\'''')
                     print(self.puzzle[i][j], end='')
             print("\n")
 
+    def validate(self, row, col):
+        '''
+        Determines if the value at the given location is valid.
+        :param row: Row of value
+        :param col: Column of value
+        :return: True if the value is valid, False if the value is invalid
+        '''
+        reg = self.hasDuplicates(self.getRegion(row, col))
+        r = self.hasDuplicates(self.getRow(row))
+        c = self.hasDuplicates(self.getColumn(col))
+        return reg and r and c
+
+    #TODO - Possible values for given cell
 
 def remAll(list, value):
     '''
@@ -127,3 +156,4 @@ def remAll(list, value):
 
 x = Sudoku()
 x.printBoard()
+print(x.getRegion(0))
