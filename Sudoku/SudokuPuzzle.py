@@ -9,7 +9,7 @@ class Sudoku:
     def __init__(self):
         self.puzzle = []
         for i in range(Sudoku.size):
-            self.puzzle.append(['']*10)
+            self.puzzle.append(['']*Sudoku.size)
         self.getFrame()
 
     def addAt(self, row, column, value):
@@ -41,7 +41,9 @@ class Sudoku:
         :param row: Row to be gotten
         :return: List containing values in given row
         '''
-        return self.puzzle[row]
+        r = self.puzzle[row]
+        r = [i for i in r if i != '']
+        return r
 
     def getColumn(self, column):
         '''
@@ -51,6 +53,8 @@ class Sudoku:
         '''
         col = []
         for i in range(Sudoku.size):
+            if self.puzzle[i][column] == '':
+                continue
             col.append(self.puzzle[i][column])
         return col
 
@@ -66,7 +70,7 @@ class Sudoku:
         else:
             return True
 
-    def hasDuplicates(self):
+    def checkDup(self):
         '''
         Checks every row and column for duplicates
         :return: True if there are duplicates, False if there are not
@@ -102,16 +106,24 @@ When you are finished, enter the word \'Done\'''')
         '''
         dim = []
         row = (reg//Sudoku.sqrt) * Sudoku.sqrt
-        col = (reg%Sudoku.sqrt) * Sudoku.sqrt
+        col = (reg % Sudoku.sqrt) * Sudoku.sqrt
         rMax = row + Sudoku.sqrt
         cMax = col + Sudoku.sqrt
         for r in range(row, rMax):
             for c in range(col, cMax):
+                if self.puzzle[r][c] == '':
+                    continue
                 dim.append(self.puzzle[r][c])
         return dim
 
-    def getRegion(self, row, col):
-        return self.getRegion((col//Sudoku.sqrt) + ((row//Sudoku.sqrt) * Sudoku.sqrt))
+    def getRegNbr(self, row, col):
+        '''
+        Determine which region the cell is in.
+        :param row: Row of given Cell
+        :param col: Column of given cell
+        :return: Region Number of given cell
+        '''
+        return (col//Sudoku.sqrt) + ((row//Sudoku.sqrt) * Sudoku.sqrt)
 
 
     def printBoard(self):
@@ -127,19 +139,35 @@ When you are finished, enter the word \'Done\'''')
                     print(self.puzzle[i][j], end='')
             print("\n")
 
-    def validate(self, row, col):
+    def validateCell(self, row, col):
         '''
         Determines if the value at the given location is valid.
         :param row: Row of value
         :param col: Column of value
         :return: True if the value is valid, False if the value is invalid
         '''
-        reg = self.hasDuplicates(self.getRegion(row, col))
+        reg = self.hasDuplicates(self.getRegion(self.getRegNbr(row, col)))
         r = self.hasDuplicates(self.getRow(row))
         c = self.hasDuplicates(self.getColumn(col))
         return reg and r and c
 
-    #TODO - Possible values for given cell
+    def getPossValues(self, row, col):
+        '''
+        Determines which values have not been used in the row, column, or region
+        :param row: Row the of the given cell
+        :param col: Column of the given cell
+        :return: Set containing the possible values of the cell
+        '''
+        if self.puzzle[row][col] != '':
+            return {int(self.puzzle[row][col])}
+        poss = set()
+        poss |= set(int(i) for i in self.getRow(row))
+        poss |= set(int(i) for i in self.getColumn(col))
+        poss |= set(int(i) for i in self.getRegion(self.getRegNbr(row, col)))
+        poss = poss.symmetric_difference(self.possValues)
+        return poss
+
+    #TODO - Solve Puzzle
 
 def remAll(list, value):
     '''
@@ -156,4 +184,5 @@ def remAll(list, value):
 
 x = Sudoku()
 x.printBoard()
-print(x.getRegion(0))
+#print(x.getRegion(0))
+print(x.getPossValues(0,1))
