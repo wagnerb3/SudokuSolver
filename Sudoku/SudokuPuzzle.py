@@ -1,15 +1,20 @@
 import math
+import random
 
 
 class Sudoku:
-    size = 4
+    size = 9
     sqrt = int(math.sqrt(size))
     possValues = [*range(1, size+1, 1)]
 
     def __init__(self):
         self.puzzle = []
+        self.empties = []
         for i in range(Sudoku.size):
             self.puzzle.append(['']*Sudoku.size)
+            for j in range(Sudoku.size):
+                self.empties.append((i, j))
+        random.shuffle(self.empties)
         self.getFrame()
 
     def addAt(self, row, column, value):
@@ -29,11 +34,12 @@ class Sudoku:
         :return: Void
         '''
         trio = entered.split(" ")
-        for num in trio:
-            if int(num)>Sudoku.size or len(trio) != 3:
-                print("Invalid Values. Try Again:\n")
-                return
-        self.addAt(trio[0], trio[1], trio[2])
+        try:
+            self.addAt(int(trio[0]), int(trio[1]), int(trio[2]))
+        except ValueError:
+            print("Invalid Value. Please Try again:\n")
+            return
+        self.empties.remove((int(trio[0]), int(trio[1])))
 
     def getRow(self, row):
         '''
@@ -58,14 +64,14 @@ class Sudoku:
             col.append(self.puzzle[i][column])
         return col
 
-    def hasDuplicates(self, list):
+    def hasDuplicates(self, l):
         '''
         Checks to see if given list has duplicates.
-        :param list: List of values in the puzzle.
+        :param l: List of values in the puzzle.
         :return: True if there are duplicates, False if there are not
         '''
-        remAll(list, '')
-        if len(list) == len(set(list)):
+        remAll(l, '')
+        if len(l) == len(set(l)):
             return False
         else:
             return True
@@ -167,7 +173,25 @@ When you are finished, enter the word \'Done\'''')
         poss = poss.symmetric_difference(self.possValues)
         return poss
 
-    #TODO - Solve Puzzle
+    def finish(self, cell):
+        '''
+        Creates a solution for a partially filled out Sudoku board. Uses backtracking.
+        :param cell: Cell location to fill in.
+        :return: Boolean - True if the Sudoku is complete, and false if it is not.
+        '''
+        row = cell[0]
+        col = cell[1]
+        for num in self.getPossValues(row, col):
+            self.puzzle[row][col] = num
+            if not self.empties:
+                return True
+            if self.finish(self.empties.pop(0)):
+                return True
+            self.puzzle[row][col] = ''
+
+        self.empties.insert(0, cell)
+        return False
+
 
 def remAll(list, value):
     '''
@@ -184,5 +208,6 @@ def remAll(list, value):
 
 x = Sudoku()
 x.printBoard()
-#print(x.getRegion(0))
-print(x.getPossValues(0,1))
+print("----------------------------------------------------------------------------------------")
+x.finish(x.empties.pop(0))
+x.printBoard()
