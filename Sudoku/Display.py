@@ -31,7 +31,7 @@ class Table:
         self.table[(row, col)] = val
 
 
-lst = [[1, 2, 3, 4, 5, 6, 7, 8 ,9],
+lst = [[1, 2, 3, 4, 5, 6, 7, 8, 9],
        [1, 2, 3, 4, 5, 6, 7, 8, 9],
        [1, 2, 3, 4, 5, 6, 7, 8, 9],
        [1, 2, 3, 4, 5, 6, 7, 8, 9],
@@ -48,5 +48,6 @@ total_columns = len(lst[0])
 
 # create root window
 root = Tk()
+control = Tk()
 t = Table(root)
 root.mainloop()
