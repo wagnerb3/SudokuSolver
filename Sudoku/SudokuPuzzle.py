@@ -13,7 +13,7 @@ class Sudoku:
         for i in range(Sudoku.size):
             self.puzzle.append(['']*Sudoku.size)
             for j in range(Sudoku.size):
-                self.empties.append((i + 1, j + 1))
+                self.empties.append((i, j))
         random.shuffle(self.empties)
         self.getFrame()
 
@@ -25,7 +25,7 @@ class Sudoku:
         :param value: Value to be placed at the given row and column
         :return: Void
         '''
-        self.puzzle[int(row) - 1][int(column) - 1] = value
+        self.puzzle[int(row)][int(column)] = value
 
     def addValue(self, entered):
         '''
@@ -64,14 +64,14 @@ class Sudoku:
             col.append(self.puzzle[i][column])
         return col
 
-    def hasDuplicates(self, list):
+    def hasDuplicates(self, l):
         '''
         Checks to see if given list has duplicates.
-        :param list: List of values in the puzzle.
+        :param l: List of values in the puzzle.
         :return: True if there are duplicates, False if there are not
         '''
-        remAll(list, '')
-        if len(list) == len(set(list)):
+        remAll(l, '')
+        if len(l) == len(set(l)):
             return False
         else:
             return True
