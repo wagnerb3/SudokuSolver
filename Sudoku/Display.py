@@ -1,9 +1,13 @@
 from tkinter import *
+import os
 
 
 class Table:
 
     def __init__(self, root):
+        root.title("Sudoku")
+        #root.iconphoto(False, PhotoImage(file = os.getcwd() + '\Resources\Depth.png'))
+        root.iconphoto(False, PhotoImage(file = os.path.abspath(os.path.join(os.getcwd(), os.pardir)) + "\Resources\Into.png"))
         self.table = {}
         for i in range(total_rows):
             for j in range(total_columns):
@@ -45,5 +49,4 @@ total_columns = len(lst[0])
 # create root window
 root = Tk()
 t = Table(root)
-t.changeValue(0,0,0)
 root.mainloop()
