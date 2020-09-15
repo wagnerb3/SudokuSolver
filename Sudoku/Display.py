@@ -6,7 +6,6 @@ class Table:
 
     def __init__(self, root):
         root.title("Sudoku")
-        #root.iconphoto(False, PhotoImage(file = os.getcwd() + '\Resources\Depth.png'))
         root.iconphoto(False, PhotoImage(file = os.path.abspath(os.path.join(os.getcwd(), os.pardir)) + "\Resources\Into.png"))
         self.table = {}
         for i in range(total_rows):
