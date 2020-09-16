@@ -1,6 +1,6 @@
 import math
 import random
-from tkinter import *
+import tkinter as tk
 
 
 class Sudoku:
@@ -16,7 +16,7 @@ class Sudoku:
             for j in range(size):
                 self.empties.append((i, j))
         random.shuffle(self.empties)
-        self.getFrame()
+        self.getFrameWork()
 
     def addAt(self, row, column, value):
         '''
@@ -72,12 +72,26 @@ Input the row, column, and value in the form of \'# # #\'\n''')
             col.append(self.puzzle[i][column])
         return col
 
-    def getFrame(self):
-        print('''Enter the starting values in your puzzle.
-The top is row 1 and the left is column 1.
-To add a value, enter row, column, and value, each separated by a space.
-For example, to add the number 1 to row 3, column 4, enter \'3 4 1\'
-When you are finished, enter the word \'Done\'''')
+    def getFrameWork(self):
+        master = tk.Tk()
+        master.geometry("300x150")
+        master.title("Enter Values")
+        tk.Label(master, text="Enter the values in your Sudoku:").grid(row=0, column=1)
+        tk.Label(master, text="Row").grid(row=1)
+        tk.Label(master, text="Column").grid(row=2)
+        tk.Label(master, text="Value").grid(row=3)
+        tk.Button(master, text="Solve").grid(row=6, column=1)
+        tk.Button(master, text="Add Value").grid(row=5, column=1)
+
+        e1 = tk.Entry(master)
+        e2 = tk.Entry(master)
+        e3 = tk.Entry(master)
+
+        e1.grid(row=1, column=1)
+        e2.grid(row=2, column=1)
+        e3.grid(row=3, column=1)
+
+        master.mainloop()
         escape = "done"
         entered = input("Add a Value:\n")
         while entered.lower() != escape:
@@ -177,3 +191,6 @@ def remAll(lst, value):
         if i != value:
             removed.append(i)
     return removed
+
+
+a = Sudoku(9)
