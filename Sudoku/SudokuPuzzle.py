@@ -37,9 +37,16 @@ class Sudoku:
         try:
             self.addAt(int(trio[0]), int(trio[1]), int(trio[2]))
         except ValueError:
-            print("Invalid Value. Please Try again:\n")
+            print("Invalid Value. Please Try Again:\n")
             return
-        self.empties.remove((int(trio[0]), int(trio[1])))
+        except IndexError:
+            print('''Invalid Value. Please Try Again:
+Input the row, column, and value in the form of \'# # #\'\n''')
+            return
+        try:
+            self.empties.remove((int(trio[0]), int(trio[1])))
+        except ValueError:
+            return
 
     def getRow(self, row):
         '''
