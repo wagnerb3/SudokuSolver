@@ -1,20 +1,20 @@
 from tkinter import *
 import os
+from Sudoku.SudokuPuzzle import Sudoku
 
 
 class Table:
 
-    def __init__(self, root):
+    def __init__(self, root, sudoku):
         root.title("Sudoku")
-        #root.iconphoto(False, PhotoImage(file = os.getcwd() + '\Resources\Depth.png'))
-        root.iconphoto(False, PhotoImage(file = os.path.abspath(os.path.join(os.getcwd(), os.pardir)) + "\Resources\Into.png"))
+        root.iconphoto(False, PhotoImage(file=os.path.abspath(os.path.join(os.getcwd(), os.pardir)) + "/Resources/Into.png"))
         self.table = {}
-        for i in range(total_rows):
-            for j in range(total_columns):
+        for i in range(len(sudoku)):
+            for j in range(len(sudoku[0])):
                 self.e = Entry(root, width=3, fg='blue',
                                font=('Arial', 16, 'bold'))
                 self.e.grid(row=i, column=j)
-                self.e.insert(END, lst[i][j])
+                self.e.insert(END, sudoku[i][j])
                 self.table[(i, j)] = self.e
 
     def changeValue(self, row, col, val):
@@ -31,23 +31,12 @@ class Table:
         self.table[(row, col)] = val
 
 
-lst = [[1, 2, 3, 4, 5, 6, 7, 8, 9],
-       [1, 2, 3, 4, 5, 6, 7, 8, 9],
-       [1, 2, 3, 4, 5, 6, 7, 8, 9],
-       [1, 2, 3, 4, 5, 6, 7, 8, 9],
-       [1, 2, 3, 4, 5, 6, 7, 8, 9],
-       [1, 2, 3, 4, 5, 6, 7, 8, 9],
-       [1, 2, 3, 4, 5, 6, 7, 8, 9],
-       [1, 2, 3, 4, 5, 6, 7, 8, 9],
-       [1, 2, 3, 4, 5, 6, 7, 8, 9]]
-
 # find total number of rows and
 # columns in list
-total_rows = len(lst)
-total_columns = len(lst[0])
 
-# create root window
-root = Tk()
-control = Tk()
-t = Table(root)
-root.mainloop()
+
+board = Tk()
+sud = Sudoku(4)
+sud.finish(sud.empties.pop(0))
+t = Table(board, sud.puzzle)
+board.mainloop()

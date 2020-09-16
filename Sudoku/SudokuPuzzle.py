@@ -3,23 +3,23 @@ import random
 
 
 class Sudoku:
-    size = 9
-    sqrt = int(math.sqrt(size))
-    possValues = [*range(1, size+1, 1)]
 
-    def __init__(self):
+    def __init__(self, size):
+        self.size = size
+        self.sqrt = int(math.sqrt(size))
+        self.possValues = [*range(1, size + 1, 1)]
         self.puzzle = []
         self.empties = []
-        for i in range(Sudoku.size):
-            self.puzzle.append(['']*Sudoku.size)
-            for j in range(Sudoku.size):
+        for i in range(size):
+            self.puzzle.append(['']*size)
+            for j in range(size):
                 self.empties.append((i, j))
         random.shuffle(self.empties)
         self.getFrame()
 
     def addAt(self, row, column, value):
         '''
-        Addes the given value at the given row and column
+        Adds the given value at the given row and column
         :param row: Row for the value to be placed
         :param column: Column for the value to be placed
         :param value: Value to be placed at the given row and column
@@ -58,20 +58,20 @@ class Sudoku:
         :return: List containing values in given row
         '''
         col = []
-        for i in range(Sudoku.size):
+        for i in range(self.size):
             if self.puzzle[i][column] == '':
                 continue
             col.append(self.puzzle[i][column])
         return col
 
-    def hasDuplicates(self, l):
+    def hasDuplicates(self, lst):
         '''
         Checks to see if given list has duplicates.
-        :param l: List of values in the puzzle.
+        :param lst: List of values in the puzzle.
         :return: True if there are duplicates, False if there are not
         '''
-        remAll(l, '')
-        if len(l) == len(set(l)):
+        remAll(lst, '')
+        if len(lst) == len(set(lst)):
             return False
         else:
             return True
@@ -81,7 +81,7 @@ class Sudoku:
         Checks every row and column for duplicates
         :return: True if there are duplicates, False if there are not
         '''
-        for i in range(Sudoku.size):
+        for i in range(self.size):
             if self.hasDuplicates(self.getRow(i)):
                 return True
             if self.hasDuplicates(self.getColumn(i)):
@@ -97,7 +97,7 @@ When you are finished, enter the word \'Done\'''')
         escape = "done"
         entered = input("Add a Value:\n")
         while entered.lower() != escape:
-            if (entered == ''):
+            if entered == '':
                 print("3 numbers must be entered or the word \'done\'")
                 entered = input("Add another value or enter \'Done\'\n")
                 continue
@@ -111,10 +111,10 @@ When you are finished, enter the word \'Done\'''')
         :return: A one dimensional list of the given region
         '''
         dim = []
-        row = (reg//Sudoku.sqrt) * Sudoku.sqrt
-        col = (reg % Sudoku.sqrt) * Sudoku.sqrt
-        rMax = row + Sudoku.sqrt
-        cMax = col + Sudoku.sqrt
+        row = (reg//self.sqrt) * self.sqrt
+        col = (reg % self.sqrt) * self.sqrt
+        rMax = row + self.sqrt
+        cMax = col + self.sqrt
         for r in range(row, rMax):
             for c in range(col, cMax):
                 if self.puzzle[r][c] == '':
@@ -129,16 +129,15 @@ When you are finished, enter the word \'Done\'''')
         :param col: Column of given cell
         :return: Region Number of given cell
         '''
-        return (col//Sudoku.sqrt) + ((row//Sudoku.sqrt) * Sudoku.sqrt)
-
+        return (col//self.sqrt) + ((row//self.sqrt) * self.sqrt)
 
     def printBoard(self):
         '''
         Prints text version of the Sudoku board.
         :return: Void
         '''
-        for i in range(Sudoku.size):
-            for j in range(Sudoku.size):
+        for i in range(self.size):
+            for j in range(self.size):
                 if self.puzzle[i][j] == '':
                     print('x', end='')
                 else:
@@ -193,21 +192,15 @@ When you are finished, enter the word \'Done\'''')
         return False
 
 
-def remAll(list, value):
+def remAll(lst, value):
     '''
     Removes all of a selected value from a given list
-    :param list: Given list to remove values
+    :param lst: Given list to remove values
     :param value: Value to be removed
     :return: List with all instances of value removed
     '''
     removed = []
-    for i in list:
+    for i in lst:
         if i != value:
             removed.append(i)
     return removed
-
-x = Sudoku()
-x.printBoard()
-print("----------------------------------------------------------------------------------------")
-x.finish(x.empties.pop(0))
-x.printBoard()
