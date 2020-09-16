@@ -1,5 +1,7 @@
 import math
+import os
 import random
+from tkinter import *
 import tkinter as tk
 
 
@@ -74,6 +76,9 @@ Input the row, column, and value in the form of \'# # #\'\n''')
 
     def getFrameWork(self):
         master = tk.Tk()
+        master.iconphoto(False,
+                       PhotoImage(file=os.path.abspath(os.path.join(os.getcwd(),
+                                                                    os.pardir)) + "/Resources/Design.png"))
         master.geometry("300x150")
         master.title("Enter Values")
         tk.Label(master, text="Enter the values in your Sudoku:").grid(row=0, column=1)
