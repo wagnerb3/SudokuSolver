@@ -1,5 +1,6 @@
 import math
 import random
+from tkinter import *
 
 
 class Sudoku:
@@ -71,30 +72,6 @@ Input the row, column, and value in the form of \'# # #\'\n''')
             col.append(self.puzzle[i][column])
         return col
 
-    def hasDuplicates(self, lst):
-        '''
-        Checks to see if given list has duplicates.
-        :param lst: List of values in the puzzle.
-        :return: True if there are duplicates, False if there are not
-        '''
-        remAll(lst, '')
-        if len(lst) == len(set(lst)):
-            return False
-        else:
-            return True
-
-    def checkDup(self):
-        '''
-        Checks every row and column for duplicates
-        :return: True if there are duplicates, False if there are not
-        '''
-        for i in range(self.size):
-            if self.hasDuplicates(self.getRow(i)):
-                return True
-            if self.hasDuplicates(self.getColumn(i)):
-                return True
-        return False
-
     def getFrame(self):
         print('''Enter the starting values in your puzzle.
 The top is row 1 and the left is column 1.
@@ -151,17 +128,6 @@ When you are finished, enter the word \'Done\'''')
                     print(self.puzzle[i][j], end='')
             print("\n")
 
-    def validateCell(self, row, col):
-        '''
-        Determines if the value at the given location is valid.
-        :param row: Row of value
-        :param col: Column of value
-        :return: True if the value is valid, False if the value is invalid
-        '''
-        reg = self.hasDuplicates(self.getRegion(self.getRegNbr(row, col)))
-        r = self.hasDuplicates(self.getRow(row))
-        c = self.hasDuplicates(self.getColumn(col))
-        return reg and r and c
 
     def getPossValues(self, row, col):
         '''
