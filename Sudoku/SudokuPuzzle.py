@@ -1,8 +1,5 @@
 import math
-import os
 import random
-from tkinter import *
-import tkinter as tk
 
 
 class Sudoku:
@@ -75,28 +72,6 @@ Input the row, column, and value in the form of \'# # #\'\n''')
         return col
 
     def getFrameWork(self):
-        master = tk.Tk()
-        master.iconphoto(False,
-                       PhotoImage(file=os.path.abspath(os.path.join(os.getcwd(),
-                                                                    os.pardir)) + "/Resources/Design.png"))
-        master.geometry("300x150")
-        master.title("Enter Values")
-        tk.Label(master, text="Enter the values in your Sudoku:").grid(row=0, column=1)
-        tk.Label(master, text="Row").grid(row=1)
-        tk.Label(master, text="Column").grid(row=2)
-        tk.Label(master, text="Value").grid(row=3)
-        tk.Button(master, text="Solve").grid(row=6, column=1)
-        tk.Button(master, text="Add Value").grid(row=5, column=1)
-
-        e1 = tk.Entry(master)
-        e2 = tk.Entry(master)
-        e3 = tk.Entry(master)
-
-        e1.grid(row=1, column=1)
-        e2.grid(row=2, column=1)
-        e3.grid(row=3, column=1)
-
-        master.mainloop()
         escape = "done"
         entered = input("Add a Value:\n")
         while entered.lower() != escape:
@@ -196,6 +171,3 @@ def remAll(lst, value):
         if i != value:
             removed.append(i)
     return removed
-
-
-a = Sudoku(9)
